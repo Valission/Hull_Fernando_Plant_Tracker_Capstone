@@ -13,7 +13,7 @@ const port = process.env.PORT
 
 app.use(cors())
 
-app.get('/', async (req, res) =>{
+app.get('/planti', async (req, res) =>{
     try{
         const info = await plantinfo.find()
 
