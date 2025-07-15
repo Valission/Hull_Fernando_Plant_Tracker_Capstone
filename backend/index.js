@@ -5,7 +5,7 @@ import 'dotenv/config'
 
 import connectDb from './db.js'
 
-import plantinfo from './testschema.js'
+import plantinfo from './plantSchema.js'
 
 const app = express()
 
