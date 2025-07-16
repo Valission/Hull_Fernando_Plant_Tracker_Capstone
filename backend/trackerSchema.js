@@ -17,10 +17,18 @@ const logsSchema = mongoose.Schema({
     },
     note: {
         type: String,
-        
     },
+    imageUrls:{
+        type: [String],
+        default: []
+    },
+    belongedTo: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+  }
     
 }, {timestamp: true})
 
-const log = mongoose.model("logs", logsSchema)
-export default log
+const userLog = mongoose.model("logs", logsSchema)
+export default userLog

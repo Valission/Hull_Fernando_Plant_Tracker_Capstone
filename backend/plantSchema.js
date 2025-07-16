@@ -17,9 +17,10 @@ const plantSchema = mongoose.Schema({
   lastWatered: {
     type : Date,
     default: Date.now
-  }
+  },
+  
 });
 
-const plantinfo = mongoose.model("plants", plantSchema);
+const PlantInfo = mongoose.model("plants", plantSchema);
 
-export default plantinfo;
+export default PlantInfo;
