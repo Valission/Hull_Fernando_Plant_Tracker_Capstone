@@ -1,7 +1,10 @@
 import { useEffect } from 'react'
 import './App.css'
 import { useState } from 'react'
-import Home from './Home'
+import {BrowserRouter as Router,Routes,Route} from 'react-router-dom'
+
+import Home from './Home.jsx'
+import SignUp from './signUp.jsx'
 
 function App() {
 
@@ -28,7 +31,12 @@ console.log(info)
 
   return (
     <>
-      <Home/>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/signup" element={<SignUp />} />
+      </Routes>
+    </Router>
     </>
   )
 }
