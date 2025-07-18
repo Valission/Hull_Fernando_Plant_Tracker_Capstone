@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 
 const plantImages = [
-    'frontend\public\pexels-adrian-mohammad-487852-1224158.jpg',
-    'frontend\public\pexels-lynda-sanchez-825238-1777813.jpg',
-    'frontend\public\pexels-nietjuhart-1445416.jpg',
-    'frontend\public\pexels-scottwebb-1022922.jpg',
-    'frontend\public\pexels-scottwebb-1048035.jpg'
+    '/public/pexels-adrian-mohammad-487852-1224158.jpg',
+    '/public/pexels-lynda-sanchez-825238-1777813.jpg',
+    '/public/pexels-nietjuhart-1445416.jpg',
+    '/public/pexels-scottwebb-1022922.jpg',
+    '/public/pexels-scottwebb-1048035.jpg'
 ]
 
 function Home(){
