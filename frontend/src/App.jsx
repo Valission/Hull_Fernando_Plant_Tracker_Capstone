@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import './App.css'
 import { useState } from 'react'
+import Home from './Home'
 
 function App() {
 
@@ -27,7 +28,7 @@ console.log(info)
 
   return (
     <>
-      Hello (from frontend)
+      <Home/>
     </>
   )
 }
