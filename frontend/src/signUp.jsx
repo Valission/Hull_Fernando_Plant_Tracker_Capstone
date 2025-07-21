@@ -1,4 +1,5 @@
 import React from "react";
+import './signUp.css'
 
 function SignUp() {
     return(
@@ -6,12 +7,13 @@ function SignUp() {
             <h2>Create Your Account</h2>
             <form className="signup-form">
                 <div>
-                    <input type="text" placeholder="Username" required />
+                    <input type="text" name="username" placeholder="Username" required />
                 </div>
                 <div>
-                    <input type="text" placeholder="Password" required />
+                    <input type="password" name="password" placeholder="Password" required />
                 </div>
                 <button type="submit">Sign Up</button>
+                <p>already have an account? <a href="">Log in</a></p>
             </form>
 
         </div>
