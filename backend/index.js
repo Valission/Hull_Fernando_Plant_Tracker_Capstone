@@ -21,7 +21,7 @@ app.use(cors())
 app.use(express.json())
 //Routes
 app.use('/auth', userRouter)
-app.use('upload', uploadRouter)
+app.use('/upload', uploadRouter)
 
 app.get('/planti', async (req, res) =>{
     try{
