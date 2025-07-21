@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import './signUp.css';
 
 function SignUp() {
@@ -7,6 +7,8 @@ function SignUp() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+
+  const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,6 +28,7 @@ function SignUp() {
       //add success message and clears the input fields
       if (response.ok) {
         setMessage("Sign up successful! You can now log in.");
+        navigate('/dashboard')
         setUsername('');
         setPassword('');
       } else {

@@ -6,6 +6,7 @@ import {BrowserRouter as Router,Routes,Route} from 'react-router-dom'
 import Home from './Home.jsx'
 import SignUp from './signUp.jsx'
 import LogIn from './Login.jsx'
+import Dashboard from './Dashboard.jsx'
 
 function App() {
 
@@ -37,6 +38,7 @@ console.log(info)
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path='/login' element={<LogIn />} />
+        <Route path='dashboard' element={<Dashboard />} />
       </Routes>
     </Router>
     </>

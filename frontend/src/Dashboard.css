@@ -1,0 +1,36 @@
+.dashboard-container {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+}
+
+.plant-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.plant-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  transition: box-shadow 0.3s;
+}
+
+.plant-card:hover {
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+.plant-photo {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.plant-name {
+  margin-top: 8px;
+  font-weight: bold;
+  font-size: 1.1rem;
+}

@@ -27,6 +27,7 @@ function LogIn(){
             if(response.ok){
                 localStorage.setItem('token', data.token)
                 setMessage('Login succesfull')
+                navigate('/dashboard')
             }
             else{
                 setMessage(data.message || 'Login failed')
