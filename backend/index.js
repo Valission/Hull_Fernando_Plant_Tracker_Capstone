@@ -1,97 +1,134 @@
-import express from 'express'
-import cors from 'cors'
+import express from 'express';
+import cors from 'cors';
 
-import 'dotenv/config'
+import 'dotenv/config';
 
-import connectDb from './db.js'
+import connectDb from './db.js';
+import uploadRouter from './routes/uploadPhoto.js';
+import userRouter from './routes/authRoutes.js';
 
-import PlantInfo from './plantSchema.js'
-import userLog from './trackerSchema.js'
-import User from './userSchema.js'
+import multer from 'multer';
+import streamifier from 'streamifier'
 
-import authMiddleware from './Middleware/authMiddleware.js'
-import userRouter from './routes/authRoutes.js'
-import uploadRouter from './routes/uploadPhoto.js'
+import {cloudinary, upload } from './Middleware/cloudinary.js';
 
-const app = express()
+import PlantInfo from './plantSchema.js';
+import userLog from './trackerSchema.js';
+import authMiddleware from './Middleware/authMiddleware.js';
 
-const port = process.env.PORT
+const app = express();
+const port = process.env.PORT;
+const uploads = multer(); 
 
-//middleware
-app.use(cors())
-app.use(express.json())
-//Routes
-app.use('/auth', userRouter)
-app.use('/upload', uploadRouter)
+function uploadToCloudinary(buffer) {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream((error, result) => {
+      if (result) resolve(result);
+      else reject(error);
+    });
+    streamifier.createReadStream(buffer).pipe(stream);
+  });
+}
 
-app.get('/planti', async (req, res) =>{
-    try{
-        const info = await PlantInfo.find()
+// Middleware
+app.use(cors({
+  origin: 'http://localhost:5173', 
+  credentials: true
+}));
+app.use(express.json());
 
-        res.status(200).json(info)
-    }catch (e){
-        console.log(e)
-        res.status(400).json(e)
-    }
-   
-})
-/*proteced route that is only availiable once the user
-logs in and used correct jwt token, authmiddleware 
-checks for token before letting the route handler run*/
+// Routes
+app.use('/auth', userRouter);
+app.use('/upload', uploadRouter);
 
-app.get('/private', authMiddleware, (req, res) =>{
-    res.json({message: `Welcome ${req.user}`})
-})
+app.get('/planti', async (req, res) => {
+  try {
+    const info = await PlantInfo.find();
+    res.status(200).json(info);
+  } catch (e) {
+    console.error(e);
+    res.status(400).json({ message: e.message });
+  }
+});
 
-app.get('/user/logs', authMiddleware, async(req, res) => {
-    try{
-        const userId = req.user
+/* Protected route that is only available once the user logs in and provides a valid JWT token */
+app.get('/private', authMiddleware, (req, res) => {
+  res.json({ message: `Welcome ${req.user}` });
+});
 
-        const logs = await userLog.find({belongedTo: userId}).populate('plant')
-
-        res.status(200).json(logs)
-    }
-    catch(e){
-        res.status(500).json({message: e.message})
-    }
-})
-
-app.get('/user/plants', authMiddleware, async( req, res) => {
-    try {
+app.get('/user/logs', authMiddleware, async (req, res) => {
+  try {
     const userId = req.user;
+    const logs = await userLog.find({ belongedTo: userId }).populate('plant');
+    res.status(200).json(logs);
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+});
 
-    // Fetch plants belonging to this user
-    // stores the plant with a photo URL and a name given by user
+app.get('/user/plants', authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user;
     const plants = await userLog.find({ belongedTo: userId });
-
     res.status(200).json(plants);
   } catch (e) {
     res.status(500).json({ message: e.message });
   }
-})
+});
 
+app.post('/plant', authMiddleware, uploads.single('photo'), async (req, res) => {
+  try {
+    const { plantName, fertilizer, Sunlight, whenToWater } = req.body;
 
-app.post('/plant', authMiddleware, async (req, res) => {
-    try{
-        const newPlant = new userLog({
-            //get fields from the trackerSchema
-            ...req.body,
-            //grabs the user ID from the token
-            belongedTo: req.user
-        })
-
-        await newPlant.save()
-
-        //return created plant
-        res.status(201).json(newPlant)
+    if (!plantName) {
+      return res.status(400).json({ message: 'plantName is required' });
     }
-    catch(e){
-        res.status(400).json({message: e.message})
+
+    let photoUrl = '';
+
+    if (req.file && req.file.buffer) {
+      const result = await uploadToCloudinary(req.file.buffer);
+      photoUrl = result.secure_url;
     }
-})
 
-app.listen(port, () => {
-    console.log(`Listening on port: ${port}`)
-    connectDb()
-})
+    const newPlant = new PlantInfo({
+      plantName,
+      fertilizer,
+      Sunlight,
+      whenToWater,
+      photo: photoUrl,
+      belongedTo: req.user, 
+    });
 
+    await newPlant.save();
+
+    res.status(201).json(newPlant);
+  } catch (e) {
+    console.error('Failed to create plant:', e);
+    res.status(500).json({ message: e.message });
+  }
+});
+
+
+
+// 404 handler - for unknown routes
+app.use((req, res) => {
+  res.status(404).json({ message: 'Route not found' });
+});
+
+// Error handling middleware - catches errors in routes
+app.use((err, req, res, next) => {
+  console.error('Unhandled error:', err);
+  res.status(500).json({ message: 'Internal server error' });
+});
+
+// Connect to DB, then start the server
+connectDb()
+  .then(() => {
+    app.listen(port, () => {
+      console.log(`Listening on port: ${port}`);
+    });
+  })
+  .catch((err) => {
+    console.error('Failed to connect to database:', err);
+  });

@@ -7,6 +7,7 @@ import Home from './Home.jsx'
 import SignUp from './signUp.jsx'
 import LogIn from './Login.jsx'
 import Dashboard from './Dashboard.jsx'
+import AddPlant from './AddPlant.jsx'
 
 function App() {
 
@@ -39,6 +40,7 @@ console.log(info)
         <Route path="/signup" element={<SignUp />} />
         <Route path='/login' element={<LogIn />} />
         <Route path='dashboard' element={<Dashboard />} />
+        <Route path='addingplant' element={<AddPlant />} />
       </Routes>
     </Router>
     </>

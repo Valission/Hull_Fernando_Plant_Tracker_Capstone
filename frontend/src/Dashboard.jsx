@@ -41,7 +41,7 @@ function Dashboard() {
   return (
     <div className="dashboard-container">
       <h1>Your Plants</h1>
-      <button className="add-plant-button"onClick={() => navigate('/addplant')}>Add plant</button>
+      <button className="add-plant-button"onClick={() => navigate('/addingplant')}>Add plant</button>
       
       {error && <p className="error-message">{error}</p>}
       

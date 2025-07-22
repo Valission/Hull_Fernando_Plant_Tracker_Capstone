@@ -18,6 +18,8 @@ const plantSchema = mongoose.Schema({
     type : Date,
     default: Date.now
   },
+  photo: {type: String},
+  belongedTo: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
   
 });
 
