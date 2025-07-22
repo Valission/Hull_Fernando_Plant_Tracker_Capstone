@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import './Home.css'
+import { Link } from "react-router-dom";
 
 const plantImages = [
     '/public/pexels-adrian-mohammad-487852-1224158.jpg',
@@ -57,8 +58,12 @@ function Home(){
             </div>
 
             <div className="btn-container">
-                <button className="Sign-up">Sign Up</button>
-                <button className="Log-in">Log In</button>
+                <Link to={'/signup'}>
+                    <button className="Sign-up">Sign Up</button>
+                </Link>
+                <Link to={'/login'}>
+                    <button className="Log-in">Log In</button>
+                </Link>
             </div>
         </div>
     )
