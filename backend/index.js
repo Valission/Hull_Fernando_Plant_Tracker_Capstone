@@ -60,6 +60,8 @@ app.get('/user/logs', authMiddleware, async (req, res) => {
   try {
     const userId = req.user;
     const logs = await userLog.find({ belongedTo: userId }).populate('plant');
+    const userPlants = logs.map(log =>log.plant)
+
     res.status(200).json(logs);
   } catch (e) {
     res.status(500).json({ message: e.message });
@@ -69,7 +71,7 @@ app.get('/user/logs', authMiddleware, async (req, res) => {
 app.get('/user/plants', authMiddleware, async (req, res) => {
   try {
     const userId = req.user;
-    const plants = await userLog.find({ belongedTo: userId });
+    const plants = await PlantInfo.find({ belongedTo: userId });
     res.status(200).json(plants);
   } catch (e) {
     res.status(500).json({ message: e.message });
@@ -109,6 +111,21 @@ app.post('/plant', authMiddleware, uploads.single('photo'), async (req, res) => 
   }
 });
 
+app.post('/plants', upload.array('images'), authMiddleware, async (req, res) => {
+  try {
+    const imageUrls = req.files.map(file => file.path); 
+    const plant = new Plant({
+      name: req.body.name,
+      imageUrls,
+      owner: req.user._id, // comes from JWT middleware
+    });
+
+    await plant.save();
+    res.status(201).json(plant);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
 
 
 // 404 handler - for unknown routes
@@ -121,6 +138,8 @@ app.use((err, req, res, next) => {
   console.error('Unhandled error:', err);
   res.status(500).json({ message: 'Internal server error' });
 });
+
+
 
 // Connect to DB, then start the server
 connectDb()

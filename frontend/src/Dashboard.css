@@ -1,52 +1,51 @@
 .dashboard-container {
-  max-width: 900px;
-  margin: auto;
-  padding: 20px;
+  padding: 2rem;
+  font-family: Arial, sans-serif;
+}
+
+.add-plant-button {
+  margin-bottom: 1.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
 }
 
 .plant-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
 }
 
 .plant-card {
-  border: 1px solid #ddd;
+  border: 1px solid #ccc;
+  padding: 1rem;
   border-radius: 8px;
-  padding: 10px;
   text-align: center;
-  transition: box-shadow 0.3s;
+  transition: box-shadow 0.3s ease;
+  background-color: #f9f9f9;
 }
 
 .plant-card:hover {
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .plant-photo {
   width: 100%;
-  height: 150px;
+  height: 200px;
   object-fit: cover;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 
 .plant-name {
-  margin-top: 8px;
+  margin-top: 0.75rem;
   font-weight: bold;
   font-size: 1.1rem;
 }
 
-.add-plant-button {
-  margin-bottom: 20px;
-  padding: 10px 20px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.2s ease;
-}
-
-.add-plant-button:hover {
-  background-color: #45a049;
+.error-message {
+  color: red;
+  margin-bottom: 1rem;
 }

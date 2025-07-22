@@ -1,7 +1,3 @@
-
-js
-Copy
-Edit
 import express from 'express';
 import multer from 'multer';
 import PlantInfo from '../models/PlantInfo.js';  // adjust path as needed

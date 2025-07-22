@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Dashboard.css';
-
-const placeholder = ['/public/plantDrawing.jpg']
+import axios from 'axios';
 
 function Dashboard() {
   const [plants, setPlants] = useState([]);
@@ -13,20 +12,21 @@ function Dashboard() {
     async function fetchPlants() {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:8080/user/plants', {
+        if (!token) {
+          setError('No token found. Please log in.');
+          return;
+        }
+
+        const response = await axios.get('http://localhost:8080/user/plants', {
           headers: {
-            'Authorization': token,
+            Authorization: token,
           },
         });
 
-        if (!response.ok) {
-          throw new Error('Failed to fetch plants');
-        }
-
-        const data = await response.json();
-        setPlants(data);
+        setPlants(response.data);
       } catch (e) {
-        setError(e.message);
+        setError('Failed to load plants');
+        console.error(e);
       }
     }
 
@@ -34,31 +34,33 @@ function Dashboard() {
   }, []);
 
   const handlePlantClick = (plantId) => {
-    // Navigate to the plant detail page, passing the plant ID
     navigate(`/plant/${plantId}`);
   };
 
   return (
     <div className="dashboard-container">
       <h1>Your Plants</h1>
-      <button className="add-plant-button"onClick={() => navigate('/addingplant')}>Add plant</button>
-      
+
+      <button className="add-plant-button" onClick={() => navigate('/addingplant')}>
+        Add Plant
+      </button>
+
       {error && <p className="error-message">{error}</p>}
-      
+
       <div className="plant-grid">
         {plants.map((plant) => (
           <div
             key={plant._id}
             className="plant-card"
             onClick={() => handlePlantClick(plant._id)}
-            style={{ cursor: 'pointer' }}
+            style={{ cursor: 'pointer' }} // optional: makes click hint obvious
           >
             <img
-              src={plant.photoUrl || '/plantDrawing.jpg'} 
-              alt={plant.name}
+              src={plant.photo || '/plantDrawing.jpg'}
+              alt={plant.plantName}
               className="plant-photo"
             />
-            <p className="plant-name">{plant.name}</p>
+            <p className="plant-name">{plant.plantName}</p>
           </div>
         ))}
       </div>
