@@ -39,19 +39,15 @@ function PlantLog() {
       {logs.length === 0 && <p>No logs available.</p>}
 
       {logs.map(log => (
-        <div key={log._id} style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center' }}>
-          <div style={{ marginRight: '1rem' }}>
-            {log.imageUrls && log.imageUrls[0] && (
-              <img src={log.imageUrls[0]} alt="log" width={200} />
-            )}
-          </div>
-          <div>
-            <p><strong>Action:</strong> {log.action}</p>
-            <p><strong>Date:</strong> {new Date(log.Date).toLocaleDateString()}</p>
-            {log.note && <p><strong>Note:</strong> {log.note}</p>}
-          </div>
-        </div>
-      ))}
+        <div key={log._id} className="log-entry">
+    {log.photo && <img src={log.photo} alt="log" />}
+    <div className="log-details">
+      <p><strong>Date:</strong> {new Date(log.date).toLocaleDateString()}</p>
+      <p><strong>Actions:</strong> {Array.isArray(log.action) ? log.action.join(', ') : log.action}</p>
+      {log.note && <p><strong>Note:</strong> {log.note}</p>}
+    </div>
+  </div>
+))}
     </div>
   );
 }

@@ -7,7 +7,7 @@ const logsSchema = mongoose.Schema({
         required: true
     },
     action: {
-        type: String,
+        type: [String],
         enum: ["watered", "Fertilized", "Repotted"],
         required: true
     },

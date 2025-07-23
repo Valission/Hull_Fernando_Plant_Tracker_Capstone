@@ -5,9 +5,23 @@ import axios from 'axios';
 function AddPlantLog() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [action, setAction] = useState('watered');
+
+  // Action is now an array
+  const [action, setAction] = useState([]);
   const [note, setNote] = useState('');
   const [image, setImage] = useState(null);
+
+  const handleCheckboxChange = (e) => {
+    const { value, checked } = e.target;
+
+    if (checked) {
+      // Add action to list
+      setAction(prev => [...prev, value]);
+    } else {
+      // Remove action from list
+      setAction(prev => prev.filter(a => a !== value));
+    }
+  };
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -15,7 +29,7 @@ function AddPlantLog() {
 
     const formData = new FormData();
     formData.append('plant', id);
-    formData.append('action', action);
+    action.forEach(a => formData.append('action', a)); // append each action
     formData.append('note', note);
     if (image) {
       formData.append('image', image);
@@ -29,7 +43,7 @@ function AddPlantLog() {
         },
       });
 
-      // Redirect back to plant logs page after submission
+      //navigates back to log once submitted
       navigate(`/plant/${id}/logs`);
     } catch (err) {
       console.error(err);
@@ -40,14 +54,39 @@ function AddPlantLog() {
     <div>
       <h2>Add New Log</h2>
       <form onSubmit={handleSubmit}>
-        <label>
-          Action:
-          <select value={action} onChange={e => setAction(e.target.value)}>
-            <option value="watered">Watered</option>
-            <option value="Fertilized">Fertilized</option>
-            <option value="Repotted">Repotted</option>
-          </select>
-        </label>
+        <fieldset>
+          <legend>Actions:</legend>
+          <label>
+            <input
+              type="checkbox"
+              value="watered"
+              onChange={handleCheckboxChange}
+              checked={action.includes('watered')}
+            />
+            Watered
+          </label>
+          <br />
+          <label>
+            <input
+              type="checkbox"
+              value="Fertilized"
+              onChange={handleCheckboxChange}
+              checked={action.includes('Fertilized')}
+            />
+            Fertilized
+          </label>
+          <br />
+          <label>
+            <input
+              type="checkbox"
+              value="Repotted"
+              onChange={handleCheckboxChange}
+              checked={action.includes('Repotted')}
+            />
+            Repotted
+          </label>
+        </fieldset>
+
         <br />
         <label>
           Note:
