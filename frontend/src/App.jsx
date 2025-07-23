@@ -8,6 +8,8 @@ import SignUp from './signUp.jsx'
 import LogIn from './Login.jsx'
 import Dashboard from './Dashboard.jsx'
 import AddPlant from './AddPlant.jsx'
+import PlantLog from './plantLog.jsx'
+import AddPlantLog from './AddPlantLog.jsx'
 
 function App() {
 
@@ -41,6 +43,8 @@ console.log(info)
         <Route path='/login' element={<LogIn />} />
         <Route path='dashboard' element={<Dashboard />} />
         <Route path='addingplant' element={<AddPlant />} />
+        <Route path='/plant/:id' element={<PlantLog />} />
+        <Route path='plant/:id/add-log' element={<AddPlantLog />} />
       </Routes>
     </Router>
     </>

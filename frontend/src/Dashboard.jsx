@@ -59,6 +59,8 @@ function Dashboard() {
               src={plant.photo || '/plantDrawing.jpg'}
               alt={plant.plantName}
               className="plant-photo"
+              onClick={() => navigate(`/plant/${plant._id}`)}
+          style={{ cursor: 'pointer', width: 200 }}
             />
             <p className="plant-name">{plant.plantName}</p>
           </div>

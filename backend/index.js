@@ -78,6 +78,19 @@ app.get('/user/plants', authMiddleware, async (req, res) => {
   }
 });
 
+app.get('/plant/:id/logs', authMiddleware, async (req, res) => {
+  try {
+    const plantId = req.params.id;
+
+    const logs = await userLog.find({ plant: plantId }).populate('plant');
+
+    res.status(200).json(logs);
+  } catch (e) {
+    console.error('Error fetching logs:', e);
+    res.status(500).json({ message: 'Failed to fetch plant logs' });
+  }
+});
+
 app.post('/plant', authMiddleware, uploads.single('photo'), async (req, res) => {
   try {
     const { plantName, fertilizer, Sunlight, whenToWater } = req.body;
