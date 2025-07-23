@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import axios from 'axios';
+import './AddPlantLog.css'
 
 function AddPlantLog() {
   const { id } = useParams();
@@ -51,57 +52,56 @@ function AddPlantLog() {
   }
 
   return (
-    <div>
-      <h2>Add New Log</h2>
-      <form onSubmit={handleSubmit}>
-        <fieldset>
-          <legend>Actions:</legend>
-          <label>
-            <input
-              type="checkbox"
-              value="watered"
-              onChange={handleCheckboxChange}
-              checked={action.includes('watered')}
-            />
-            Watered
-          </label>
-          <br />
-          <label>
-            <input
-              type="checkbox"
-              value="Fertilized"
-              onChange={handleCheckboxChange}
-              checked={action.includes('Fertilized')}
-            />
-            Fertilized
-          </label>
-          <br />
-          <label>
-            <input
-              type="checkbox"
-              value="Repotted"
-              onChange={handleCheckboxChange}
-              checked={action.includes('Repotted')}
-            />
-            Repotted
-          </label>
-        </fieldset>
+  <div className="add-log-container">
+    <h2>Add New Log</h2>
+    <form className="add-log-form" onSubmit={handleSubmit}>
+      <fieldset>
+        <legend>Actions:</legend>
+        <label>
+          <input
+            type="checkbox"
+            value="watered"
+            onChange={handleCheckboxChange}
+            checked={action.includes('watered')}
+          />
+          Watered
+        </label>
+        <br />
+        <label>
+          <input
+            type="checkbox"
+            value="Fertilized"
+            onChange={handleCheckboxChange}
+            checked={action.includes('Fertilized')}
+          />
+          Fertilized
+        </label>
+        <br />
+        <label>
+          <input
+            type="checkbox"
+            value="Repotted"
+            onChange={handleCheckboxChange}
+            checked={action.includes('Repotted')}
+          />
+          Repotted
+        </label>
+      </fieldset>
 
-        <br />
-        <label>
-          Note:
-          <textarea value={note} onChange={e => setNote(e.target.value)} />
-        </label>
-        <br />
-        <label>
-          Upload Image:
-          <input type="file" onChange={e => setImage(e.target.files[0])} />
-        </label>
-        <br />
-        <button type="submit">Submit Log</button>
-      </form>
-    </div>
-  );
+      <label>
+        Note:
+        <textarea value={note} onChange={e => setNote(e.target.value)} />
+      </label>
+
+      <label>
+        Upload Image:
+        <input type="file" onChange={e => setImage(e.target.files[0])} />
+      </label>
+
+      <button type="submit">Submit Log</button>
+    </form>
+  </div>
+);
 }
 
 export default AddPlantLog;
