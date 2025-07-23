@@ -1,12 +1,12 @@
 import express from 'express';
 import multer from 'multer';
-import PlantInfo from '../models/PlantInfo.js';  // adjust path as needed
-import { cloudinary } from '../cloudinaryConfig.js'; // your cloudinary setup
+import PlantInfo from '../models/PlantInfo.js';  
+import { cloudinary } from '../cloudinaryConfig.js'; 
 import streamifier from 'streamifier';
-import authMiddleware from '../Middleware/authMiddleware.js'; // your auth middleware
+import authMiddleware from '../Middleware/authMiddleware.js'; 
 
 const router = express.Router();
-const upload = multer(); // stores files in memory
+const upload = multer(); 
 
 function uploadToCloudinary(buffer) {
   return new Promise((resolve, reject) => {
@@ -49,5 +49,45 @@ router.post('/plant', authMiddleware, upload.single('photo'), async (req, res) =
     res.status(500).json({ error: 'Failed to create plant' });
   }
 });
+
+router.post('/:id/logs', authMiddleware, upload.single('image'), async (req, res) => {
+  try {
+    const plantId = req.params.id;
+    const { action, note } = req.body;
+
+    if (!plantId) {
+      return res.status(400).json({ error: 'Plant ID is required' });
+    }
+
+    let imageUrl = '';
+    if (req.file) {
+      const result = await uploadToCloudinary(req.file.buffer);
+      imageUrl = result.secure_url;
+    }
+
+    const newLog = {
+      action: Array.isArray(action) ? action : [action],
+      note,
+      image: imageUrl,
+      createdAt: new Date(),
+    };
+
+    const updatedPlant = await PlantInfo.findByIdAndUpdate(
+      plantId,
+      { $push: { logs: { $each: [newLog], $position: 0 } } }, 
+      { new: true }
+    );
+
+    if (!updatedPlant) {
+      return res.status(404).json({ error: 'Plant not found' });
+    }
+
+    res.status(201).json(updatedPlant);
+  } catch (error) {
+    console.error('Error creating log:', error);
+    res.status(500).json({ error: 'Failed to create log' });
+  }
+});
+
 
 export default router;

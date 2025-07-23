@@ -45,7 +45,7 @@ function AddPlantLog() {
       });
 
       //navigates back to log once submitted
-      navigate(`/plant/${id}/logs`);
+      navigate(`/plant/${id}`);
     } catch (err) {
       console.error(err);
     }

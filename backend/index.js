@@ -7,6 +7,7 @@ import connectDb from './db.js';
 import uploadRouter from './routes/uploadPhoto.js';
 import userRouter from './routes/authRoutes.js';
 
+
 import multer from 'multer';
 import streamifier from 'streamifier'
 
@@ -88,6 +89,35 @@ app.get('/plant/:id/logs', authMiddleware, async (req, res) => {
   } catch (e) {
     console.error('Error fetching logs:', e);
     res.status(500).json({ message: 'Failed to fetch plant logs' });
+  }
+});
+
+app.post('/plant/:id/logs', authMiddleware, uploads.single('image'), async (req, res) => {
+  try {
+    const plantId = req.params.id;
+    const { action, note } = req.body;
+
+    let imageUrl = '';
+
+    if (req.file && req.file.buffer) {
+      const result = await uploadToCloudinary(req.file.buffer);
+      imageUrl = result.secure_url;
+    }
+
+    const newLog = new userLog({
+      action: Array.isArray(action) ? action : [action],
+      note,
+      image: imageUrl,
+      plant: plantId,
+      belongedTo: req.user,
+      createdAt: new Date(),
+    });
+
+    await newLog.save();
+    res.status(201).json(newLog);
+  } catch (e) {
+    console.error('Failed to create log:', e);
+    res.status(500).json({ message: 'Failed to create log' });
   }
 });
 

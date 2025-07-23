@@ -11,10 +11,6 @@ const logsSchema = mongoose.Schema({
         enum: ["watered", "Fertilized", "Repotted"],
         required: true
     },
-    Date: {
-        type: Date,
-        default: Date.now
-    },
     note: {
         type: String,
     },
@@ -28,7 +24,7 @@ const logsSchema = mongoose.Schema({
         required: true
   }
     
-}, {timestamp: true})
+}, {timestamps: true})
 
 const userLog = mongoose.model("logs", logsSchema)
 export default userLog

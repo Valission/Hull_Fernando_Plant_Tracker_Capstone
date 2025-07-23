@@ -1,7 +1,8 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import './plantLog.css'
+import './plantLog.css';
+
 function PlantLog() {
   const { id } = useParams(); // plant ID
   const [logs, setLogs] = useState([]);
@@ -19,7 +20,13 @@ function PlantLog() {
         if (response.data.length > 0) {
           setPlantName(response.data[0].plant.plantName);
         }
-        setLogs(response.data);
+
+        //Sort logs newest to oldest using date 
+        const sortedLogs = [...response.data].sort((a, b) => {
+          return new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt);
+        });
+
+        setLogs(sortedLogs);
       } catch (err) {
         console.error(err);
       }
@@ -40,14 +47,18 @@ function PlantLog() {
 
       {logs.map(log => (
         <div key={log._id} className="log-entry">
-    {log.photo && <img src={log.photo} alt="log" />}
-    <div className="log-details">
-      <p><strong>Date:</strong> {new Date(log.date).toLocaleDateString()}</p>
-      <p><strong>Actions:</strong> {Array.isArray(log.action) ? log.action.join(', ') : log.action}</p>
-      {log.note && <p><strong>Note:</strong> {log.note}</p>}
-    </div>
-  </div>
-))}
+          {log.image && (
+            <div className="log-image">
+              <img src={log.image} alt="log" />
+            </div>
+          )}
+          <div className="log-details">
+            <p><strong>Date:</strong> {new Date(log.date || log.createdAt).toLocaleDateString()}</p>
+            <p><strong>Actions:</strong> {Array.isArray(log.action) ? log.action.join(', ') : log.action}</p>
+            {log.note && <p><strong>Note:</strong> {log.note}</p>}
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
