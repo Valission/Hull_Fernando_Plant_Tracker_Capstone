@@ -1,12 +1,12 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-
+import './plantLog.css'
 function PlantLog() {
   const { id } = useParams(); // plant ID
   const [logs, setLogs] = useState([]);
   const [plantName, setPlantName] = useState('');
-  const navigate = useNavigate(); // ✅ This must be INSIDE the component
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     async function fetchLogs() {
