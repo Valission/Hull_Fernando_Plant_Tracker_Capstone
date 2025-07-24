@@ -4,7 +4,7 @@ import streamifier from 'streamifier'
 import PlantInfo from '../plantSchema.js'
 import { cloudinary } from '../cloudinaryConfig.js'
 
-const upload = multer()  // memory storage by default
+const upload = multer()
 const router = express.Router()
 
 router.post('/plant', upload.single('photo'), async (req, res) => {

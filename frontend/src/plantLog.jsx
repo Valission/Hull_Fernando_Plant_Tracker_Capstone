@@ -4,7 +4,7 @@ import axios from 'axios';
 import './plantLog.css';
 
 function PlantLog() {
-  const { id } = useParams(); // plant ID
+  const { id } = useParams(); 
   const [logs, setLogs] = useState([]);
   const [plantName, setPlantName] = useState('');
   const navigate = useNavigate(); 
@@ -47,11 +47,19 @@ function PlantLog() {
 
       {logs.map(log => (
         <div key={log._id} className="log-entry">
-          {log.image && (
-            <div className="log-image">
-              <img src={log.image} alt="log" />
-            </div>
-          )}
+          {log.imageUrls && log.imageUrls.length > 0 && (
+  <div className="log-image">
+    {log.imageUrls.map((url, index) => (
+      <img
+        key={index}
+        src={url}
+        alt={`Log image ${index + 1}`}
+        className="log-thumbnail"
+      />
+    ))}
+  </div>
+)}
+
           <div className="log-details">
             <p><strong>Date:</strong> {new Date(log.date || log.createdAt).toLocaleDateString()}</p>
             <p><strong>Actions:</strong> {Array.isArray(log.action) ? log.action.join(', ') : log.action}</p>

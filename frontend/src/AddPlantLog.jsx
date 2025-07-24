@@ -30,7 +30,7 @@ function AddPlantLog() {
 
     const formData = new FormData();
     formData.append('plant', id);
-    action.forEach(a => formData.append('action', a)); // append each action
+    action.forEach(a => formData.append('action', a));
     formData.append('note', note);
     if (image) {
       formData.append('image', image);
@@ -93,10 +93,6 @@ function AddPlantLog() {
         <textarea value={note} onChange={e => setNote(e.target.value)} />
       </label>
 
-      <label>
-        Upload Image:
-        <input type="file" onChange={e => setImage(e.target.files[0])} />
-      </label>
 
       <button type="submit">Submit Log</button>
     </form>

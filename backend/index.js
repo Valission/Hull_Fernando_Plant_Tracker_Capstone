@@ -160,7 +160,7 @@ app.post('/plants', upload.array('images'), authMiddleware, async (req, res) => 
     const plant = new Plant({
       name: req.body.name,
       imageUrls,
-      owner: req.user._id, // comes from JWT middleware
+      owner: req.user._id, 
     });
 
     await plant.save();
@@ -171,12 +171,12 @@ app.post('/plants', upload.array('images'), authMiddleware, async (req, res) => 
 });
 
 
-// 404 handler - for unknown routes
+// for unknown routes
 app.use((req, res) => {
   res.status(404).json({ message: 'Route not found' });
 });
 
-// Error handling middleware - catches errors in routes
+// catches errors in routes
 app.use((err, req, res, next) => {
   console.error('Unhandled error:', err);
   res.status(500).json({ message: 'Internal server error' });

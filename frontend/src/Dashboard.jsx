@@ -53,7 +53,7 @@ function Dashboard() {
             key={plant._id}
             className="plant-card"
             onClick={() => handlePlantClick(plant._id)}
-            style={{ cursor: 'pointer' }} // optional: makes click hint obvious
+            style={{ cursor: 'pointer' }} 
           >
             <img
               src={plant.photo || '/plantDrawing.jpg'}
